@@ -7,8 +7,6 @@ declare module 'fs-extra' {
 }
 
 const CJS_CONFIG = {
-    experimentalDecorators: true,
-    jsx: ts.JsxEmit.React,
     module: ts.ModuleKind.CommonJS,
     moduleResolution: ts.ModuleResolutionKind.NodeJs,
     noEmitOnError: false,
