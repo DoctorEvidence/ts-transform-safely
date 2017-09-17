@@ -1,0 +1,1 @@
+declare function safely<T>(value: T, ...a: any[]): T
