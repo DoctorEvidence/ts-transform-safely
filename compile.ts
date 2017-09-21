@@ -17,6 +17,7 @@ const CJS_CONFIG = {
 }
 
 export default function compile(input: string, options: ts.CompilerOptions = CJS_CONFIG) {
+    console.log('startingcompling')
     const files = globSync(input)
     const compilerHost = ts.createCompilerHost(options)
     const program = ts.createProgram(files, options, compilerHost)
@@ -36,6 +37,6 @@ export default function compile(input: string, options: ts.CompilerOptions = CJS
         let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')
         console.log(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`)
     })
-
+    console.log('done compilng', emitResult.emittedFiles)
     return msgs
 }

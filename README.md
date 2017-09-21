@@ -17,7 +17,7 @@ const safelyTransformer = require('ts-transform-safely').default
       loader: 'ts-loader',
       options: {
           getCustomTransformers: () => ({
-              before: [safelyTransformer]
+              before: [safelyTransformer()]
           }),
           transpileOnly: true
       }
