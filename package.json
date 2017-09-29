@@ -1,6 +1,6 @@
 {
   "name": "ts-transform-safely",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Transforms safe access to properties and variables",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
