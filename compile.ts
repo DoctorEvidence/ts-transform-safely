@@ -13,7 +13,7 @@ const CJS_CONFIG = {
     noUnusedLocals: true,
     noUnusedParameters: true,
     stripInternal: true,
-    target: ts.ScriptTarget.ES2015
+    target: ts.ScriptTarget.ES5
 }
 
 export default function compile(input: string, options: ts.CompilerOptions = CJS_CONFIG) {

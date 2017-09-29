@@ -35,7 +35,7 @@ function ensureObject(node: ts.Node, ctx: ts.TransformationContext, isArray?: bo
                 isArray ? ts.createArrayLiteral() : ts.createObjectLiteral())))
     } else if (ts.isElementAccessExpression(node)) {
         let ensuredObject = ensureObject(node.expression, ctx, ts.isNumericLiteral(node.argumentExpression))
-        let objectRef = getObjectReference(ctx)
+        let objectRef = getObjectReference(ctx, 'safe')
         return ts.createBinary(
             markAsSafe(ts.createElementAccess(ts.createBinary(objectRef, ts.SyntaxKind.EqualsToken, ensuredObject), node.argumentExpression)),
             ts.SyntaxKind.BarBarToken,
@@ -81,7 +81,7 @@ function visitor(ctx: ts.TransformationContext, sf: ts.SourceFile) {
             let object = propertyAccess.expression
             let objectRef = object
             if (!ts.isIdentifier(object)) {
-                objectRef = getObjectReference(ctx)
+                objectRef = getObjectReference(ctx, 'safe')
                 object = markAsSafe(ts.createBinary(objectRef, ts.SyntaxKind.EqualsToken, object))
             }
             // object == null ? void 0 : objects.property
@@ -111,16 +111,15 @@ function visitor(ctx: ts.TransformationContext, sf: ts.SourceFile) {
             if ((<any> node).isSafe) {
                 return node
             }
-            callee = (<ts.CallExpression> node).expression
-            if ((<any> callee).isSafeMember) {
+            callee = (node as ts.CallExpression).expression
+            let calleeConditional = (callee as ts.ParenthesizedExpression).expression as ts.ConditionalExpression
+            if (calleeConditional && (<any> calleeConditional).isSafeMember) {
                 // objectExpr.method == null ? void 0 : objectExpr.method ? objectExpr.method(args) : void 0
-                let calleeConditional = <ts.ConditionalExpression> (<any> node)
                 let member = calleeConditional.whenFalse
-                calleeConditional.whenFalse = ts.createConditional(
+                return ts.updateConditional(calleeConditional, calleeConditional.condition, calleeConditional.whenTrue, ts.createConditional(
                         member,
                         markAsSafe(ts.createCall(member, [], (<ts.CallExpression> node).arguments)),
-                        ts.createVoidZero())
-                return callee
+                        ts.createVoidZero()))
             } else {
                 // func == null ? void 0 : func()
                 if (ts.isIdentifier(callee)) {

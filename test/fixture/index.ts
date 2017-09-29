@@ -34,7 +34,16 @@ var tests = {
   },
   arrow: function() {
     return {
-      get: (row) => safely(row.SelectedOutcome.FieldType)
+      get: safely(console.log(1, (row) => row.SelectedOutcome.FieldType))
+    }
+  },
+  inForOf: function () {
+    let _a = []
+    for (let i of _a) {
+      let b = safely(empty.b.c);
+      (function() {
+        b = safely(empty.b.c)
+      })()
     }
   },
   thisAssignment: function() {

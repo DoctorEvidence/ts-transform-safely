@@ -12,7 +12,7 @@ var CJS_CONFIG = {
     noUnusedLocals: true,
     noUnusedParameters: true,
     stripInternal: true,
-    target: ts.ScriptTarget.ES2015
+    target: ts.ScriptTarget.ES5
 };
 function compile(input, options) {
     if (options === void 0) { options = CJS_CONFIG; }
