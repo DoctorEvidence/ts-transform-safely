@@ -1,9 +1,12 @@
 /// <reference path="../../typings.d.ts" />
 
 var obj = {foo: 'bar'}
-var empty = null
+var empty: string = null
 var func = null
 var maybeArray = null
+export default (num: string) => {
+  safely(obj.foo)
+}
 var tests = {
   basic: function() {
     console.assert(safely(empty.b.c) === undefined)
@@ -17,7 +20,7 @@ var tests = {
   computedMember: function() {
     safely(empty[obj.foo].b)
   },
-  simpleCall: function() {
+  simpleCall: function(test: string) {
     safely(func(3))
   },
   funcExpr: function() {

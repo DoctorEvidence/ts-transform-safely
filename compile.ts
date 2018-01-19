@@ -1,6 +1,7 @@
 import * as ts from 'typescript'
 import { sync as globSync } from 'glob'
 import { transform } from './src'
+import * as fs from 'fs'
 
 declare module 'fs-extra' {
     export function outputJsonSync(file: string, data: any, opts?: {}): void;
@@ -17,8 +18,14 @@ const CJS_CONFIG = {
 }
 
 export default function compile(input: string, options: ts.CompilerOptions = CJS_CONFIG) {
-    console.log('startingcompling')
+    console.log('starting compling')
     const files = globSync(input)
+    console.log('transpiling', ts.transpileModule(fs.readFileSync(files[0], {encoding:'utf8'}), {
+        compilerOptions: options,
+        reportDiagnostics: true,
+        files[0]
+    }))
+    return
     const compilerHost = ts.createCompilerHost(options)
     const program = ts.createProgram(files, options, compilerHost)
 

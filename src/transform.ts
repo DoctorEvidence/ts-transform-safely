@@ -47,7 +47,7 @@ function ensureObject(node: ts.Node, ctx: ts.TransformationContext, isArray?: bo
     // else can't be ensured, just used the referenced expression
     return node
 }
-function visitor(ctx: ts.TransformationContext, sf: ts.SourceFile) {
+function visitor(ctx: ts.TransformationContext) {
 
     const safelyVisitor: ts.Visitor = (node: ts.Node): ts.VisitResult<ts.Node> => {
         if (ts.isBinaryExpression(node) && node.operatorToken.kind == ts.SyntaxKind.EqualsToken) {
@@ -141,7 +141,8 @@ function visitor(ctx: ts.TransformationContext, sf: ts.SourceFile) {
     }
     const visitor: ts.Visitor = (node: ts.Node): ts.VisitResult<ts.Node> => {
         if (ts.isCallExpression(node)) {
-            if (node.expression.getText(sf) == 'safely') {
+            const calleeExpression = node.expression
+            if (ts.isIdentifier(calleeExpression) && calleeExpression.text == 'safely') {
                 return safelyVisitor(node.arguments[0])
             }
         }
@@ -152,6 +153,6 @@ function visitor(ctx: ts.TransformationContext, sf: ts.SourceFile) {
 
 export default function(/*opts?: Opts*/) {
     return (ctx: ts.TransformationContext): ts.Transformer<ts.SourceFile> => {
-        return (sf: ts.SourceFile) => ts.visitNode(sf, visitor(ctx, sf))
+        return (sf: ts.SourceFile) => ts.visitNode(sf, visitor(ctx))
     }
 }

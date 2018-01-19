@@ -1,8 +1,13 @@
+"use strict";
 /// <reference path="../../typings.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
 var obj = { foo: 'bar' };
 var empty = null;
 var func = null;
 var maybeArray = null;
+exports.default = (function (num) {
+    obj == null ? void 0 : obj.foo;
+});
 var tests = {
     basic: function () {
         console.assert(((safe_1 = (empty == null ? void 0 : empty.b)) == null ? void 0 : safe_1.c) === undefined);
@@ -20,7 +25,7 @@ var tests = {
         (safe_4 = (empty == null ? void 0 : empty[obj == null ? void 0 : obj.foo])) == null ? void 0 : safe_4.b;
         var safe_4;
     },
-    simpleCall: function () {
+    simpleCall: function (test) {
         func ? func(3) : void 0;
     },
     funcExpr: function () {
